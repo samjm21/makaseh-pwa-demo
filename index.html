@@ -9,22 +9,25 @@
 </head>
 
 <body style="font-family:Arial, sans-serif; padding:20px;">
+
   <h1>Makaseh Identity Demo</h1>
   <p><strong>No login. No accounts. No passwords.</strong></p>
 
   <h2>What this demo shows</h2>
   <ul>
-    <li>Identity operates above the OS</li>
-    <li>Actions secured by tokenized trust</li>
-    <li>Encryption before transmission</li>
-    <li>Ciphertext-only storage</li>
-    <li>Optional public decryption challenge</li>
+    <li>Identity operates above the operating system</li>
+    <li>Trust is bound to actions, not users or devices</li>
+    <li>Encryption occurs before transmission</li>
+    <li>Only ciphertext is stored or exported</li>
+    <li>OS persistence does not restore trust</li>
   </ul>
+
+  <hr>
 
   <h2>Encrypted Payload Demo</h2>
   <p>
-    Click below to generate an encrypted payload.
-    You may export and attempt decryption using any third-party tool.
+    Each click generates a new encrypted payload.
+    Payloads can be exported and tested externally.
   </p>
 
   <button onclick="generatePayload()">Generate Encrypted Payload</button>
@@ -34,20 +37,55 @@
        style="background:#111;color:#0f0;padding:10px;margin-top:10px;white-space:pre-wrap;"></pre>
 
   <p><em>
-    Without a valid Makaseh token, meaningful decryption is mathematically infeasible.
+    Without a valid Makaseh context, payloads carry no reusable meaning.
   </em></p>
-<p>
-  <a href="challenge.html">View the Public Decryption Challenge →</a>
-</p>
 
+  <hr>
+
+  <h3>Structural Decode (Non-Decryption)</h3>
+  <p>
+    Paste an exported payload below to verify that it contains data.
+    This operation does <strong>not</strong> restore identity, trust, or meaning.
+  </p>
+
+  <textarea id="decodeInput"
+            rows="3"
+            style="width:100%;"></textarea><br><br>
+
+  <button onclick="structuralDecode()">Decode Structure Only</button>
+
+  <pre id="decodeResult"
+       style="background:#222;color:#ccc;padding:10px;margin-top:10px;white-space:pre-wrap;"></pre>
+
+  <hr>
+
+  <p>
+    <a href="challenge.html">View the Public Decryption Challenge →</a>
+  </p>
+
+  <p><strong>Makaseh principle:</strong><br>
+    Security is architectural, not policy-based.
+  </p>
 
   <script>
     let currentPayload = "";
 
     function generatePayload() {
+      // cryptographically secure random bytes
       const randomBytes = crypto.getRandomValues(new Uint8Array(32));
+
+      // Base64 encode
       currentPayload = btoa(String.fromCharCode(...randomBytes));
-      document.getElementById("payloadBox").textContent = currentPayload;
+
+      // simple non-sensitive fingerprint (first 8 bytes)
+      const fingerprint = Array.from(randomBytes.slice(0, 8))
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("");
+
+      document.getElementById("payloadBox").textContent =
+        currentPayload +
+        "\n\nFingerprint: " + fingerprint +
+        "\n(Note: fingerprint is for comparison only)";
     }
 
     function downloadPayload() {
@@ -62,9 +100,37 @@
       link.click();
     }
 
+    function structuralDecode() {
+      const input = document.getElementById("decodeInput").value.trim();
+      const output = document.getElementById("decodeResult");
+
+      if (!input) {
+        output.textContent = "No payload provided.";
+        return;
+      }
+
+      try {
+        const binary = atob(input);
+        const bytes = new Uint8Array([...binary].map(c => c.charCodeAt(0)));
+
+        const hexSample = Array.from(bytes.slice(0, 16))
+          .map(b => b.toString(16).padStart(2, "0"))
+          .join(" ");
+
+        output.textContent =
+          "Decoded byte length: " + bytes.length + "\n" +
+          "Hex sample (first 16 bytes): " + hexSample + "\n\n" +
+          "This confirms data presence only.\n" +
+          "No plaintext, identity, or reusable context is recoverable.";
+      } catch (e) {
+        output.textContent = "Invalid or corrupted payload.";
+      }
+    }
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js');
     }
   </script>
+
 </body>
 </html>
