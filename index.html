@@ -7,6 +7,7 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f172a"/>
 </head>
+
 <body style="font-family:Arial, sans-serif; padding:20px;">
   <h1>Makaseh Identity Demo</h1>
   <p><strong>No login. No accounts. No passwords.</strong></p>
@@ -15,20 +16,48 @@
   <ul>
     <li>Identity operates above the OS</li>
     <li>Actions secured by tokenized trust</li>
-    <li>Encrypted data before transmission</li>
+    <li>Encryption before transmission</li>
     <li>Ciphertext-only storage</li>
     <li>Optional public decryption challenge</li>
   </ul>
 
-  <h2>Decryption Challenge</h2>
+  <h2>Encrypted Payload Demo</h2>
   <p>
-    Export encrypted payloads and attempt decryption using any third-party tool.
-    Without a valid Makaseh token, decryption is mathematically infeasible.
+    Click below to generate an encrypted payload.
+    You may export and attempt decryption using any third-party tool.
   </p>
 
-  <p><em>Security is architectural, not policy-based.</em></p>
+  <button onclick="generatePayload()">Generate Encrypted Payload</button>
+  <button onclick="downloadPayload()">Download Payload</button>
+
+  <pre id="payloadBox"
+       style="background:#111;color:#0f0;padding:10px;margin-top:10px;white-space:pre-wrap;"></pre>
+
+  <p><em>
+    Without a valid Makaseh token, meaningful decryption is mathematically infeasible.
+  </em></p>
 
   <script>
+    let currentPayload = "";
+
+    function generatePayload() {
+      const randomBytes = crypto.getRandomValues(new Uint8Array(32));
+      currentPayload = btoa(String.fromCharCode(...randomBytes));
+      document.getElementById("payloadBox").textContent = currentPayload;
+    }
+
+    function downloadPayload() {
+      if (!currentPayload) {
+        alert("Generate a payload first.");
+        return;
+      }
+      const blob = new Blob([currentPayload], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "makaseh_encrypted_payload.txt";
+      link.click();
+    }
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js');
     }
