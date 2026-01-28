@@ -13,10 +13,18 @@
   <h1>Makaseh Identity Demo</h1>
   <p><strong>No login. No accounts. No passwords.</strong></p>
 
+  <p>
+    This demo explores a security model where identity and trust operate
+    <strong>above the operating system</strong>, independent of OS identity,
+    device persistence, or accounts.
+  </p>
+
+  <hr>
+
   <h2>What this demo shows</h2>
   <ul>
-    <li>Identity operates above the operating system</li>
-    <li>Trust is bound to actions, not users or devices</li>
+    <li>Identity is not tied to users, devices, or OS accounts</li>
+    <li>Trust is bound to actions and context</li>
     <li>Encryption occurs before transmission</li>
     <li>Only ciphertext is stored or exported</li>
     <li>OS persistence does not restore trust</li>
@@ -24,10 +32,28 @@
 
   <hr>
 
+  <h2>How to Test This Demo</h2>
+  <ol>
+    <li>Generate an encrypted payload.</li>
+    <li>Observe that each payload and fingerprint is different.</li>
+    <li>Download the payload and store it anywhere.</li>
+    <li>Paste the payload into the Structural Decode section.</li>
+    <li>Confirm that data exists, but no meaning is recovered.</li>
+    <li>Refresh the page, uninstall the app, or switch devices.</li>
+    <li>Attempt to reuse or interpret the payload.</li>
+  </ol>
+
+  <p>
+    If identity, trust, or reusable meaning is restored at any point
+    without valid Makaseh context, the system has failed.
+  </p>
+
+  <hr>
+
   <h2>Encrypted Payload Demo</h2>
   <p>
-    Each click generates a new encrypted payload.
-    Payloads can be exported and tested externally.
+    Each click generates a new encrypted payload using cryptographically
+    secure randomness. Payloads may be exported and analyzed externally.
   </p>
 
   <button onclick="generatePayload()">Generate Encrypted Payload</button>
@@ -37,15 +63,16 @@
        style="background:#111;color:#0f0;padding:10px;margin-top:10px;white-space:pre-wrap;"></pre>
 
   <p><em>
-    Without a valid Makaseh context, payloads carry no reusable meaning.
+    Tip: Save a payload, refresh the page, or open this demo on another device
+    and attempt reuse. Observe what changes — and what does not.
   </em></p>
 
   <hr>
 
   <h3>Structural Decode (Non-Decryption)</h3>
   <p>
-    Paste an exported payload below to verify that it contains data.
-    This operation does <strong>not</strong> restore identity, trust, or meaning.
+    Paste an exported payload below to verify that it contains real data.
+    This operation <strong>does not</strong> restore identity, trust, or meaning.
   </p>
 
   <textarea id="decodeInput"
@@ -56,6 +83,21 @@
 
   <pre id="decodeResult"
        style="background:#222;color:#ccc;padding:10px;margin-top:10px;white-space:pre-wrap;"></pre>
+
+  <hr>
+
+  <h3>What This Demo Does NOT Do</h3>
+  <ul>
+    <li>It does not expose encryption keys.</li>
+    <li>It does not reveal identities or personal data.</li>
+    <li>It does not provide account recovery.</li>
+    <li>It does not bypass or depend on OS security.</li>
+  </ul>
+
+  <p><small>
+    Note: The operating system provides execution and storage only.
+    Trust validity is enforced at the action and context layer.
+  </small></p>
 
   <hr>
 
@@ -71,13 +113,9 @@
     let currentPayload = "";
 
     function generatePayload() {
-      // cryptographically secure random bytes
       const randomBytes = crypto.getRandomValues(new Uint8Array(32));
-
-      // Base64 encode
       currentPayload = btoa(String.fromCharCode(...randomBytes));
 
-      // simple non-sensitive fingerprint (first 8 bytes)
       const fingerprint = Array.from(randomBytes.slice(0, 8))
         .map(b => b.toString(16).padStart(2, "0"))
         .join("");
