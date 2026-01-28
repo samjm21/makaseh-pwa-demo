@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Makaseh Identity Demo</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f172a"/>
+</head>
+<body style="font-family:Arial, sans-serif; padding:20px;">
+  <h1>Makaseh Identity Demo</h1>
+  <p><strong>No login. No accounts. No passwords.</strong></p>
+
+  <h2>What this demo shows</h2>
+  <ul>
+    <li>Identity operates above the OS</li>
+    <li>Actions secured by tokenized trust</li>
+    <li>Encrypted data before transmission</li>
+    <li>Ciphertext-only storage</li>
+    <li>Optional public decryption challenge</li>
+  </ul>
+
+  <h2>Decryption Challenge</h2>
+  <p>
+    Export encrypted payloads and attempt decryption using any third-party tool.
+    Without a valid Makaseh token, decryption is mathematically infeasible.
+  </p>
+
+  <p><em>Security is architectural, not policy-based.</em></p>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+</body>
+</html>
