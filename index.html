@@ -14,21 +14,36 @@
   <p><strong>No login. No accounts. No passwords.</strong></p>
 
   <p>
-    This demo explores a security model where identity and trust operate
-    <strong>above the operating system</strong>, independent of OS identity,
-    device persistence, or accounts.
+    This demo explores an <strong>OS-independent identity model</strong> where 
+    identity and trust are enforced at the architectural layer rather than 
+    through traditional operating system accounts or persistent sessions.
   </p>
 
   <hr>
 
   <h2>What this demo shows</h2>
   <ul>
-    <li>Identity is not tied to users, devices, or OS accounts</li>
-    <li>Trust is bound to actions and context</li>
-    <li>Encryption occurs before transmission</li>
+    <li>Identity is not tied to OS user accounts</li>
+    <li>Trust is bound to action and runtime context</li>
+    <li>Encryption occurs before any transmission</li>
     <li>Only ciphertext is stored or exported</li>
-    <li>OS persistence does not restore trust</li>
+    <li>Refreshing or reinstalling does not restore prior trust state</li>
   </ul>
+
+  <hr>
+
+  <h2>Architecture Clarification</h2>
+  <p>
+    In this prototype, “OS-independent” refers to the logical trust model.
+    The operating system provides execution and storage, but trust validation,
+    tokenization, and identity binding occur within Makaseh’s own identity layer.
+  </p>
+
+  <p>
+    This demo does <strong>not</strong> modify firmware, kernel components,
+    or baseband hardware. It demonstrates architectural trust separation,
+    not hypervisor-level or firmware-level isolation.
+  </p>
 
   <hr>
 
@@ -38,14 +53,14 @@
     <li>Observe that each payload and fingerprint is different.</li>
     <li>Download the payload and store it anywhere.</li>
     <li>Paste the payload into the Structural Decode section.</li>
-    <li>Confirm that data exists, but no meaning is recovered.</li>
+    <li>Confirm that data exists, but no meaning is restored.</li>
     <li>Refresh the page, uninstall the app, or switch devices.</li>
     <li>Attempt to reuse or interpret the payload.</li>
   </ol>
 
   <p>
-    If identity, trust, or reusable meaning is restored at any point
-    without valid Makaseh context, the system has failed.
+    If identity, trust, or reusable meaning is restored without valid Makaseh context,
+    the architectural trust model has failed.
   </p>
 
   <hr>
@@ -71,8 +86,8 @@
 
   <h3>Structural Decode (Non-Decryption)</h3>
   <p>
-    Paste an exported payload below to verify that it contains real data.
-    This operation <strong>does not</strong> restore identity, trust, or meaning.
+    Paste an exported payload below to verify that it contains structured data.
+    This operation <strong>does not</strong> restore identity, trust, or plaintext.
   </p>
 
   <textarea id="decodeInput"
@@ -91,12 +106,12 @@
     <li>It does not expose encryption keys.</li>
     <li>It does not reveal identities or personal data.</li>
     <li>It does not provide account recovery.</li>
-    <li>It does not bypass or depend on OS security.</li>
+    <li>It does not claim firmware or kernel-level isolation.</li>
   </ul>
 
   <p><small>
-    Note: The operating system provides execution and storage only.
-    Trust validity is enforced at the action and context layer.
+    The operating system provides execution and storage services only.
+    Identity validity and token trust are enforced within the Makaseh identity layer.
   </small></p>
 
   <hr>
