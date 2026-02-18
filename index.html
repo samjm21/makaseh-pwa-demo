@@ -1,30 +1,81 @@
-No login. No accounts. No passwords.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Makaseh Identity Demo</title>
+  <meta name="theme-color" content="#0f172a">
+</head>
 
-Makaseh Identity demonstrates a post-account security model where identity operates independently of traditional OS login systems, and trust is bound to actions — not stored credentials.
+<body style="font-family: Arial, sans-serif; padding: 30px; max-width: 900px; margin: auto; line-height: 1.6;">
 
-This is not another IAM tool.
+  <h1>Makaseh Identity Demo</h1>
 
-This is an architectural shift.
+  <p><strong>No login. No accounts. No passwords.</strong></p>
 
-What the demo shows:
+  <p>
+    Makaseh Identity demonstrates a post-account security model where identity operates
+    independently of traditional OS login systems, and trust is bound to actions —
+    not stored credentials.
+  </p>
 
-• Identity is not tied to OS user accounts
-• Actions are secured by context-bound cryptographic tokens
-• Encryption happens before data leaves the device
-• Only ciphertext is stored or exported
-• No centralized identity database
-• Optional public structural verification challenge
+  <p><strong>This is not another IAM tool.</strong></p>
+  <p><strong>This is an architectural shift.</strong></p>
 
-The demo intentionally allows encrypted payload export.
+  <hr>
 
-You can:
+  <h2>What the Demo Shows</h2>
 
-Use third-party tools
+  <ul>
+    <li>Identity is not tied to OS user accounts</li>
+    <li>Actions are secured by context-bound cryptographic tokens</li>
+    <li>Encryption happens before data leaves the device</li>
+    <li>Only ciphertext is stored or exported</li>
+    <li>No centralized identity database</li>
+    <li>Optional public structural verification challenge</li>
+  </ul>
 
-Attempt analysis
+  <hr>
 
-Inspect ciphertext freely
+  <h2>Decryption & Analysis Challenge</h2>
 
-Without valid Makaseh token context, meaningful identity restoration or action reuse is not possible within the architecture.
+  <p>
+    This demo intentionally allows encrypted payload export.
+  </p>
 
-Traditional IAM
+  <p>You are encouraged to:</p>
+
+  <ul>
+    <li>Use third-party tools</li>
+    <li>Attempt structural analysis</li>
+    <li>Inspect ciphertext freely</li>
+  </ul>
+
+  <p>
+    Without valid Makaseh token context, meaningful identity restoration
+    or action reuse is not possible within this architectural model.
+  </p>
+
+  <hr>
+
+  <h2>Why Makaseh is Different</h2>
+
+  <p>
+    Traditional IAM systems protect accounts.
+  </p>
+
+  <p>
+    Makaseh removes account dependency from trust validation.
+  </p>
+
+  <p>
+    Security becomes an architectural property of action authorization —
+    not a credential storage problem.
+  </p>
+
+  <hr>
+
+  <p><strong>Security is architectural, not policy-based.</strong></p>
+
+</body>
+</html>
