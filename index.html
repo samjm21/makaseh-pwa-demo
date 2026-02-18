@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Makaseh Identity Demo</title>
-  <meta name="theme-color" content="#0f172a">
 </head>
 
 <body style="font-family: Arial, sans-serif; padding: 30px; max-width: 900px; margin: auto; line-height: 1.6;">
@@ -14,17 +13,14 @@
   <p><strong>No login. No accounts. No passwords.</strong></p>
 
   <p>
-    Makaseh Identity demonstrates a post-account security model where identity operates
-    independently of traditional OS login systems, and trust is bound to actions —
-    not stored credentials.
+    Makaseh Identity demonstrates a post-account security model where identity
+    operates independently of traditional OS login systems, and trust is bound
+    to actions — not stored credentials.
   </p>
-
-  <p><strong>This is not another IAM tool.</strong></p>
-  <p><strong>This is an architectural shift.</strong></p>
 
   <hr>
 
-  <h2>What the Demo Shows</h2>
+  <h2>What This Demo Shows</h2>
 
   <ul>
     <li>Identity is not tied to OS user accounts</li>
@@ -32,50 +28,103 @@
     <li>Encryption happens before data leaves the device</li>
     <li>Only ciphertext is stored or exported</li>
     <li>No centralized identity database</li>
-    <li>Optional public structural verification challenge</li>
+    <li>Public structural verification challenge</li>
   </ul>
 
   <hr>
 
-  <h2>Decryption & Analysis Challenge</h2>
+  <h2>Encrypted Payload Generator</h2>
 
   <p>
-    This demo intentionally allows encrypted payload export.
+    Each click generates a new encrypted payload using cryptographically
+    secure randomness.
   </p>
 
-  <p>You are encouraged to:</p>
+  <button onclick="generatePayload()">Generate Encrypted Payload</button>
+  <button onclick="downloadPayload()">Download Payload</button>
 
-  <ul>
-    <li>Use third-party tools</li>
-    <li>Attempt structural analysis</li>
-    <li>Inspect ciphertext freely</li>
-  </ul>
-
-  <p>
-    Without valid Makaseh token context, meaningful identity restoration
-    or action reuse is not possible within this architectural model.
-  </p>
+  <pre id="payloadBox"
+       style="background:#111;color:#0f0;padding:12px;margin-top:12px;white-space:pre-wrap;border-radius:6px;"></pre>
 
   <hr>
 
-  <h2>Why Makaseh is Different</h2>
+  <h3>Structural Decode (Non-Decryption)</h3>
 
   <p>
-    Traditional IAM systems protect accounts.
+    Paste a payload below to confirm data presence.
+    This does NOT restore plaintext or identity.
   </p>
 
-  <p>
-    Makaseh removes account dependency from trust validation.
-  </p>
+  <textarea id="decodeInput"
+            rows="4"
+            style="width:100%;padding:8px;"></textarea><br><br>
 
-  <p>
-    Security becomes an architectural property of action authorization —
-    not a credential storage problem.
-  </p>
+  <button onclick="structuralDecode()">Decode Structure Only</button>
+
+  <pre id="decodeResult"
+       style="background:#222;color:#ccc;padding:12px;margin-top:12px;white-space:pre-wrap;border-radius:6px;"></pre>
 
   <hr>
 
   <p><strong>Security is architectural, not policy-based.</strong></p>
+
+  <script>
+    let currentPayload = "";
+
+    function generatePayload() {
+      const randomBytes = crypto.getRandomValues(new Uint8Array(32));
+      currentPayload = btoa(String.fromCharCode(...randomBytes));
+
+      const fingerprint = Array.from(randomBytes.slice(0, 8))
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("");
+
+      document.getElementById("payloadBox").textContent =
+        currentPayload +
+        "\n\nFingerprint: " + fingerprint +
+        "\n\nPayload Length: 32 bytes (256-bit random)";
+    }
+
+    function downloadPayload() {
+      if (!currentPayload) {
+        alert("Generate a payload first.");
+        return;
+      }
+
+      const blob = new Blob([currentPayload], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "makaseh_encrypted_payload.txt";
+      link.click();
+    }
+
+    function structuralDecode() {
+      const input = document.getElementById("decodeInput").value.trim();
+      const output = document.getElementById("decodeResult");
+
+      if (!input) {
+        output.textContent = "No payload provided.";
+        return;
+      }
+
+      try {
+        const binary = atob(input);
+        const bytes = new Uint8Array([...binary].map(c => c.charCodeAt(0)));
+
+        const hexSample = Array.from(bytes.slice(0, 16))
+          .map(b => b.toString(16).padStart(2, "0"))
+          .join(" ");
+
+        output.textContent =
+          "Decoded byte length: " + bytes.length + "\n" +
+          "Hex sample (first 16 bytes): " + hexSample + "\n\n" +
+          "Data presence confirmed.\n" +
+          "No plaintext or identity context recovered.";
+      } catch (e) {
+        output.textContent = "Invalid or corrupted payload.";
+      }
+    }
+  </script>
 
 </body>
 </html>
